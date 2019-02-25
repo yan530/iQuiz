@@ -8,6 +8,12 @@
 
 import UIKit
 
+struct Quiz2 {
+    let name: String
+    let desc: String
+    let phone: String
+}
+
 class Quiz {
     
     init(name: String, descrip: String) {
@@ -85,10 +91,10 @@ class QuizDataSource : NSObject, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellReuseIdentifier")!
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellReuseIdentifier") as! TableViewCell
         
-        cell.textLabel?.text = data[indexPath.row].name
-        cell.detailTextLabel?.text = data[indexPath.row].descrip
+        cell.nameLabel?.text = data[indexPath.row].name
+        cell.descLabel?.text = data[indexPath.row].descrip
         return cell
     }
 }
@@ -118,20 +124,22 @@ class ViewController: UIViewController, UITableViewDelegate {
     
     var quiz: [Quiz] = []
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("User selected row at \(indexPath)")
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let vc = segue.destination as? QuestionViewController,
+            let index = tableView.indexPathForSelectedRow?.row
+            else {
+                return
+        }
+        vc.dataFromFirst = index
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         quiz = quizRepo.getQuiz()
-        
         dataSource = QuizDataSource(quiz)
         tableView.dataSource = dataSource
         tableView.delegate = self
     }
-
-
 }
 
