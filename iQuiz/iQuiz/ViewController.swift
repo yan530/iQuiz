@@ -114,6 +114,7 @@ class ViewController: UIViewController, UITableViewDelegate {
     var quizList : [Question] = []
     var dataSource: QuizDataSource? = nil
     var quizRepo: QuizRepository = (UIApplication.shared.delegate as! AppDelegate).quizRepository
+    var success = false
     
     let jsonUrlString = "http://tednewardsandbox.site44.com/questions.json"
     
@@ -126,36 +127,7 @@ class ViewController: UIViewController, UITableViewDelegate {
         tableView.reloadData()
     }
     
-    //alert
-    @IBAction func SettingAlert(_ sender: Any) {
-        let alert = UIAlertController(title: "URL", message: jsonUrlString, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("check now", comment: "Default action"), style: .default, handler: { _ in
-            NSLog("The \"retrieve data\" alert occured.")
-        }))
-        self.present(alert, animated: true, completion: {
-            print("This is hte completion handler for the present() code")
-        })
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let vc = segue.destination as? QuestionViewController,
-            let index = tableView.indexPathForSelectedRow?.row
-            else {
-                return
-        }
-        switch index {
-        case 0:
-            vc.types = math
-        case 1:
-            vc.types = marvel
-        default:
-            vc.types = science
-        }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    func loadJson(){
         guard let url = URL(string: jsonUrlString) else {return}
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let dataResponse = data,
@@ -180,11 +152,63 @@ class ViewController: UIViewController, UITableViewDelegate {
                     type.append(Quiz(name: i["title"] as! String, descrip: i["desc"] as! String, quiz: quiz))
                 }
                 localData = type
+                self.success = true
             } catch let parsingError {
                 print("Error", parsingError)
             }
         }
         task.resume()
+    }
+    
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    
+    @IBOutlet weak var status: UILabel!
+    //alert
+    @IBAction func SettingAlert(_ sender: Any) {
+        let alert = UIAlertController(title: "Check Connection", message: jsonUrlString, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Ok", comment: "Yay"), style: .default, handler: { _ in}))
+        self.present(alert, animated: true, completion: {})
+        
+        status.text! = "Intense operation beginning"
+        spinner.startAnimating()
+        self.loadJson()
+        
+        // Put the intense work into a worker thread
+        DispatchQueue.global().async {
+            // Do something intense
+            Thread.sleep(forTimeInterval: 5)
+            
+            // Update: Put the update back onto the UI thread
+            DispatchQueue.main.async {
+                self.spinner.stopAnimating()
+                self.spinner.hidesWhenStopped = true
+                if (self.success){
+                    self.status.text = "Success!"
+                } else {
+                    self.status.text = "Failed, using local data"
+                }
+            }
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let vc = segue.destination as? QuestionViewController,
+            let index = tableView.indexPathForSelectedRow?.row
+            else {
+                return
+        }
+        switch index {
+        case 0:
+            vc.types = math
+        case 1:
+            vc.types = marvel
+        default:
+            vc.types = science
+        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         quiz = quizRepo.getQuiz()
         dataSource = QuizDataSource(quiz)

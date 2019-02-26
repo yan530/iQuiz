@@ -66,28 +66,50 @@
                                     <action selector="clearNames:" destination="BYZ-38-t0r" eventType="touchUpInside" id="268-dI-x4T"/>
                                 </connections>
                             </button>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WgU-L5-cJp">
-                                <rect key="frame" x="0.0" y="852" width="414" height="44"/>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hdf-44-Xji">
+                                <rect key="frame" x="0.0" y="813" width="414" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <items>
                                     <barButtonItem title="Setting" id="1Hu-YZ-FZ5">
                                         <connections>
-                                            <action selector="SettingAlert:" destination="BYZ-38-t0r" id="zdo-lt-R7h"/>
+                                            <action selector="SettingAlert:" destination="BYZ-38-t0r" id="L0G-lA-i5w"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>
                             </toolbar>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Usa-re-uC9">
+                                <rect key="frame" x="28" y="506" width="331" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Data Status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Akm-Ng-Bd3">
+                                <rect key="frame" x="28" y="477" width="90" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="zj5-GY-Wkl">
+                                <rect key="frame" x="126" y="477" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="spinner" destination="zj5-GY-Wkl" id="Fxt-kY-nBa"/>
+                        <outlet property="status" destination="Usa-re-uC9" id="Utc-7d-fh2"/>
                         <outlet property="tableView" destination="aO5-Cn-Ilm" id="0K3-uj-wCv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-55.200000000000003" y="27.436281859070466"/>
+            <point key="canvasLocation" x="-56.521739130434788" y="26.785714285714285"/>
         </scene>
         <!--Question View Controller-->
         <scene sceneID="Lqb-Hb-egy">
@@ -252,8 +274,7 @@
         <image name="Image" width="76" height="76"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="IHd-iU-KCC"/>
-        <segue reference="Qec-en-G8P"/>
+        <segue reference="I1f-2W-EgQ"/>
         <segue reference="qig-55-jRq"/>
     </inferredMetricsTieBreakers>
 </document>
