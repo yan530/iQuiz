@@ -8,10 +8,10 @@
 
 import UIKit
 
-struct Quiz2 {
-    let name: String
-    let desc: String
-    let phone: String
+struct Question {
+    let question: String
+    let answer: String
+    let answers: [String]
 }
 
 class Quiz {
@@ -55,9 +55,9 @@ class TestingQuizRepository : QuizRepository {
     }
     
     let localTestingData: [Quiz] = [
-        Quiz(name: "Mathematics", descrip: "This is a math quiz."),
-        Quiz(name: "Marvel Super Heroes", descrip: "Do you know your super heroes?"),
-        Quiz(name: "Science", descrip: "Science is fun!")
+        Quiz(name: "Mathematics", descrip: "Did you pass the third grade?"),
+        Quiz(name: "Marvel Super Heroes", descrip: "Avengers, Assemble!"),
+        Quiz(name: "Science", descrip: "Because SCIENCE!")
     ]
     
     func getQuiz() -> [Quiz] {
@@ -91,7 +91,7 @@ class QuizDataSource : NSObject, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellReuseIdentifier") as! TableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! TableViewCell
         
         cell.nameLabel?.text = data[indexPath.row].name
         cell.descLabel?.text = data[indexPath.row].descrip
@@ -122,7 +122,25 @@ class ViewController: UIViewController, UITableViewDelegate {
     var dataSource: QuizDataSource? = nil
     var quizRepo: QuizRepository = (UIApplication.shared.delegate as! AppDelegate).quizRepository
     
-    var quiz: [Quiz] = []
+    var quiz: [Quiz] = [
+        Quiz(name: "Mathematics", descrip: "Did you pass the third grade?"),
+        Quiz(name: "Marvel Super Heroes", descrip: "Avengers, Assemble!"),
+        Quiz(name: "Science", descrip: "Because SCIENCE!")
+    ]
+    
+    let math = [
+        Question(question: "What is 2+2?", answer: "1", answers: ["4", "22", "An irrational number", "Nobody knows"])
+    ]
+    
+    let marvel = [
+        Question(question: "Who is Iron Man?", answer: "1", answers: ["Tony Stark", "Obadiah Stane", "A rock hit by Megadeth", "Nobody knows"]),
+        Question(question: "Who founded the X-Men?", answer: "2", answers: ["Tony Stark", "Professor X", "The X-Institute", "Erik Lensherr"]),
+        Question(question: "How did Spider-Man get his powers?", answer: "1", answers: ["He was bitten by a radioactive spider", "He ate a radioactive spider", "He is a radioactive spider", "He looked at a radioactive spider"])
+    ]
+    
+    let science = [
+        Question(question: "What is fire?", answer: "1", answers: ["One of the four classical elements", "A magical reaction given to us by God", "A band that hasn't yet been discovered",  "Fire! Fire! Fire! heh-heh"])
+    ]
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let vc = segue.destination as? QuestionViewController,
@@ -130,12 +148,21 @@ class ViewController: UIViewController, UITableViewDelegate {
             else {
                 return
         }
-        vc.dataFromFirst = index
+        switch index {
+        case 0:
+            vc.types = math
+        case 1:
+            vc.types = marvel
+        default:
+            vc.types = science
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+       
+        let jsonUrlString = "http://tednewardsandbox.site44.com/questions.json"
+        
         quiz = quizRepo.getQuiz()
         dataSource = QuizDataSource(quiz)
         tableView.dataSource = dataSource
