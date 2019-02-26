@@ -31,12 +31,14 @@ class AnswerViewController: UITableViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if (segue.identifier == "next" && num < total - 1) {
+            print("hi")
             num += 1
             let vc = segue.destination as! QuestionViewController
             vc.num = num
             vc.types = types
             vc.correct = correct
-        } else {
+        } else if (segue.identifier == "next") {
+            print("hi")
             let vc = segue.destination as! FinishViewController
             vc.correct = correct
             vc.total = total
@@ -44,7 +46,8 @@ class AnswerViewController: UITableViewController {
     }
     
     @IBAction func goBack(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+        performSegue(withIdentifier: "menu", sender: AnyObject.self)
+        //dismiss(animated: true, completion: nil)
     }
 
     override func viewDidLoad() {

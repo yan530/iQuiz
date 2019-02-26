@@ -145,15 +145,31 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gNt-Ys-dLg">
+                        <view key="tableFooterView" contentMode="scaleToFill" id="pAa-w0-et3">
                             <rect key="frame" x="0.0" y="72" width="414" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" title="Next"/>
-                            <connections>
-                                <action selector="next:" destination="ORG-FB-nwY" eventType="touchUpInside" id="y2C-VH-uOK"/>
-                                <segue destination="dVu-d4-Hhd" kind="show" identifier="end" id="8T8-UA-s3b"/>
-                            </connections>
-                        </button>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TOE-YV-LjV">
+                                    <rect key="frame" x="36" y="8" width="43" height="30"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" title="Back"/>
+                                    <connections>
+                                        <action selector="goBack:" destination="ORG-FB-nwY" eventType="touchUpInside" id="uHL-PX-ven"/>
+                                        <segue destination="BYZ-38-t0r" kind="show" identifier="menu" id="Hk1-er-C16"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gJr-ti-eJK">
+                                    <rect key="frame" x="308" y="8" width="72" height="30"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" title="Next"/>
+                                    <connections>
+                                        <action selector="next:" destination="ORG-FB-nwY" eventType="touchUpInside" id="ojg-Ya-QhS"/>
+                                        <segue destination="dVu-d4-Hhd" kind="show" identifier="end" id="d9v-aI-VgW"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="Vvp-H1-DwP">
                                 <rect key="frame" x="0.0" y="28" width="414" height="44"/>
@@ -169,21 +185,15 @@
                             <outlet property="delegate" destination="ORG-FB-nwY" id="UNB-F6-JEK"/>
                         </connections>
                     </tableView>
-                    <toolbarItems>
-                        <barButtonItem title="Back" id="kje-zb-S0s">
-                            <connections>
-                                <action selector="goBack:" destination="ORG-FB-nwY" id="z1D-T8-YMI"/>
-                            </connections>
-                        </barButtonItem>
-                    </toolbarItems>
+                    <toolbarItems/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <segue destination="HGf-rg-7CH" kind="show" identifier="next" id="T5V-qH-bQH"/>
+                        <segue destination="HGf-rg-7CH" kind="show" identifier="next" id="Qec-en-G8P"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="db3-Mb-l4z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1420" y="25"/>
+            <point key="canvasLocation" x="1418.840579710145" y="24.776785714285712"/>
         </scene>
         <!--Finish View Controller-->
         <scene sceneID="KgS-X6-XlB">
@@ -232,6 +242,7 @@
         <image name="Image" width="76" height="76"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="T5V-qH-bQH"/>
+        <segue reference="Qec-en-G8P"/>
+        <segue reference="Hk1-er-C16"/>
     </inferredMetricsTieBreakers>
 </document>
