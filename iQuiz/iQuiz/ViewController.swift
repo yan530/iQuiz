@@ -15,23 +15,37 @@ struct Question {
 }
 
 class Quiz {
-    
-    init(name: String, descrip: String) {
+
+    init(name: String, descrip: String, quiz: [Question]) {
         self.name = name
         self.descrip = descrip
+        self.quiz = quiz
     }
-    
+
     var name = ""
     var descrip = ""
-    
-    var getName: String {
-        get { return name }
-    }
-    
-    var getDescrip: String {
-        get { return descrip }
-    }
+    var quiz = [Question(question: "", answer : "", answers : [])]
 }
+
+var localData: [Quiz] = [
+    Quiz(name: "Mathematics", descrip: "Did you pass the third grade?", quiz: math),
+    Quiz(name: "Marvel Super Heroes", descrip: "Avengers, Assemble!", quiz : marvel),
+    Quiz(name: "Science", descrip: "Because SCIENCE!", quiz: science)
+]
+
+let math = [
+    Question(question: "What is 2+2?", answer: "1", answers: ["4", "22", "An irrational number", "Nobody knows"])
+]
+
+let marvel = [
+    Question(question: "Who is Iron Man?", answer: "1", answers: ["Tony Stark", "Obadiah Stane", "A rock hit by Megadeth", "Nobody knows"]),
+    Question(question: "Who founded the X-Men?", answer: "2", answers: ["Tony Stark", "Professor X", "The X-Institute", "Erik Lensherr"]),
+    Question(question: "How did Spider-Man get his powers?", answer: "1", answers: ["He was bitten by a radioactive spider", "He ate a radioactive spider", "He is a radioactive spider", "He looked at a radioactive spider"])
+]
+
+let science = [
+    Question(question: "What is fire?", answer: "1", answers: ["One of the four classical elements", "A magical reaction given to us by God", "A band that hasn't yet been discovered",  "Fire! Fire! Fire! heh-heh"])
+]
 
 protocol QuizRepository {
     
@@ -54,11 +68,7 @@ class TestingQuizRepository : QuizRepository {
         }
     }
     
-    let localTestingData: [Quiz] = [
-        Quiz(name: "Mathematics", descrip: "Did you pass the third grade?"),
-        Quiz(name: "Marvel Super Heroes", descrip: "Avengers, Assemble!"),
-        Quiz(name: "Science", descrip: "Because SCIENCE!")
-    ]
+    let localTestingData: [Quiz] = localData
     
     func getQuiz() -> [Quiz] {
         return localTestingData
@@ -101,6 +111,14 @@ class QuizDataSource : NSObject, UITableViewDataSource {
 
 class ViewController: UIViewController, UITableViewDelegate {
     
+    var quizList : [Question] = []
+    var dataSource: QuizDataSource? = nil
+    var quizRepo: QuizRepository = (UIApplication.shared.delegate as! AppDelegate).quizRepository
+    
+    let jsonUrlString = "http://tednewardsandbox.site44.com/questions.json"
+    
+    var quiz: [Quiz] = localData
+    
     @IBOutlet weak internal var tableView: UITableView!
     
     //clear button
@@ -110,37 +128,14 @@ class ViewController: UIViewController, UITableViewDelegate {
     
     //alert
     @IBAction func SettingAlert(_ sender: Any) {
-        let alert = UIAlertController(title: "New Alert", message: "Settings go here", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
-            NSLog("The \"OK\" alert occured.")
+        let alert = UIAlertController(title: "URL", message: jsonUrlString, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("check now", comment: "Default action"), style: .default, handler: { _ in
+            NSLog("The \"retrieve data\" alert occured.")
         }))
         self.present(alert, animated: true, completion: {
             print("This is hte completion handler for the present() code")
         })
     }
-    
-    var dataSource: QuizDataSource? = nil
-    var quizRepo: QuizRepository = (UIApplication.shared.delegate as! AppDelegate).quizRepository
-    
-    var quiz: [Quiz] = [
-        Quiz(name: "Mathematics", descrip: "Did you pass the third grade?"),
-        Quiz(name: "Marvel Super Heroes", descrip: "Avengers, Assemble!"),
-        Quiz(name: "Science", descrip: "Because SCIENCE!")
-    ]
-    
-    let math = [
-        Question(question: "What is 2+2?", answer: "1", answers: ["4", "22", "An irrational number", "Nobody knows"])
-    ]
-    
-    let marvel = [
-        Question(question: "Who is Iron Man?", answer: "1", answers: ["Tony Stark", "Obadiah Stane", "A rock hit by Megadeth", "Nobody knows"]),
-        Question(question: "Who founded the X-Men?", answer: "2", answers: ["Tony Stark", "Professor X", "The X-Institute", "Erik Lensherr"]),
-        Question(question: "How did Spider-Man get his powers?", answer: "1", answers: ["He was bitten by a radioactive spider", "He ate a radioactive spider", "He is a radioactive spider", "He looked at a radioactive spider"])
-    ]
-    
-    let science = [
-        Question(question: "What is fire?", answer: "1", answers: ["One of the four classical elements", "A magical reaction given to us by God", "A band that hasn't yet been discovered",  "Fire! Fire! Fire! heh-heh"])
-    ]
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let vc = segue.destination as? QuestionViewController,
@@ -160,8 +155,36 @@ class ViewController: UIViewController, UITableViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
-        let jsonUrlString = "http://tednewardsandbox.site44.com/questions.json"
+        
+        guard let url = URL(string: jsonUrlString) else {return}
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let dataResponse = data,
+                error == nil else {
+                    print(error?.localizedDescription ?? "Response Error")
+                    return }
+            do{
+                //here dataResponse received from a network request
+                let jsonResponse = try JSONSerialization.jsonObject(with:
+                    dataResponse, options: [])
+                guard let jsonArray = jsonResponse as? [[String: Any]] else {
+                    return
+                }
+                //print(jsonArray)
+                var type : [Quiz] = [] //Initialising Model Array
+                for i in jsonArray{
+                    var quiz : [Question] = []
+                    let questions = i["questions"] as! [[String: Any]]
+                    for j in questions {
+                        quiz.append(Question(question: j["text"] as! String, answer:j["answer"] as! String, answers:j["answers"] as! [String]))
+                    }
+                    type.append(Quiz(name: i["title"] as! String, descrip: i["desc"] as! String, quiz: quiz))
+                }
+                localData = type
+            } catch let parsingError {
+                print("Error", parsingError)
+            }
+        }
+        task.resume()
         
         quiz = quizRepo.getQuiz()
         dataSource = QuizDataSource(quiz)

@@ -36,7 +36,6 @@ class QuestionViewController: UITableViewController{
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        print(types)
         return types[num].question
     }
     
@@ -46,7 +45,6 @@ class QuestionViewController: UITableViewController{
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        print(indexPath.row)
         cell.textLabel?.text = types[num].answers[indexPath.row]
         return cell
     }
