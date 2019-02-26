@@ -97,15 +97,31 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <button key="tableFooterView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="03y-Y6-KX2">
+                        <view key="tableFooterView" contentMode="scaleToFill" id="sd8-jO-lrh">
                             <rect key="frame" x="0.0" y="72" width="414" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" title="Submit"/>
-                            <connections>
-                                <action selector="submit:" destination="HGf-rg-7CH" eventType="touchUpInside" id="BVZ-vT-HVB"/>
-                                <segue destination="ORG-FB-nwY" kind="show" identifier="toAnswer" id="DCH-iy-lwy"/>
-                            </connections>
-                        </button>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zB8-yg-0kP">
+                                    <rect key="frame" x="332" y="6" width="49" height="30"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" title="Submit"/>
+                                    <connections>
+                                        <action selector="submit:" destination="HGf-rg-7CH" eventType="touchUpInside" id="v9z-Fg-W60"/>
+                                        <segue destination="ORG-FB-nwY" kind="show" identifier="toAnswer" id="IHd-iU-KCC"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1hw-hA-Ty3">
+                                    <rect key="frame" x="50" y="6" width="34" height="30"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" title="Back"/>
+                                    <connections>
+                                        <action selector="goBack:" destination="HGf-rg-7CH" eventType="touchUpInside" id="gwo-IL-goA"/>
+                                        <segue destination="BYZ-38-t0r" kind="show" identifier="menu" id="qig-55-jRq"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="1lP-sg-9wy">
                                 <rect key="frame" x="0.0" y="28" width="414" height="44"/>
@@ -121,16 +137,10 @@
                             <outlet property="delegate" destination="HGf-rg-7CH" id="s7B-Ds-VFP"/>
                         </connections>
                     </tableView>
-                    <toolbarItems>
-                        <barButtonItem title="Back" id="xl8-Xe-vBs">
-                            <connections>
-                                <action selector="goBack:" destination="HGf-rg-7CH" id="8bG-Ui-mLt"/>
-                            </connections>
-                        </barButtonItem>
-                    </toolbarItems>
+                    <toolbarItems/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="submit" destination="03y-Y6-KX2" id="jAZ-6w-U0E"/>
+                        <outlet property="submit" destination="zB8-yg-0kP" id="e3g-Mc-8wT"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Epz-8w-5g1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -242,7 +252,8 @@
         <image name="Image" width="76" height="76"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="IHd-iU-KCC"/>
         <segue reference="Qec-en-G8P"/>
-        <segue reference="Hk1-er-C16"/>
+        <segue reference="qig-55-jRq"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -20,7 +20,7 @@ class QuestionViewController: UITableViewController{
     @IBOutlet weak var submit: UIButton!
     
     @IBAction func goBack(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+        performSegue(withIdentifier: "menu", sender: AnyObject.self)
     }
     
     @IBAction func submit(_ sender: Any) {
